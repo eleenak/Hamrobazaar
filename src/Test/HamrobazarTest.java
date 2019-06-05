@@ -1,4 +1,4 @@
-package newproject;
+package Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,7 +10,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.Select;
+
+import Element.Hamrobazaar;
 
 class HamrobazarTest {
 	@Test
@@ -26,25 +27,22 @@ class HamrobazarTest {
 		// visit hamrobazar
 		browser.get("https://hamrobazaar.com/");
 
+		Hamrobazaar obj = new Hamrobazaar(browser);
+		
 		// wait for 10 seconds
 		browser.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
 
-		// find search bar with the relative xpath
-		WebElement searchBar = browser.findElement(By.xpath("//table[@class='mainbody']//table//tbody//tr//td//"
-				+ "table//tbody//tr//td//table//tbody//tr//td//div//input[@name='searchword']"));
-
 		// search for iphone
-		searchBar.sendKeys("iphone");
+		obj.SetSearchKeyword("iphone");
+		;
 
 		// click Go button
-		browser.findElement(By.xpath("//body//div//input[2]")).click();
-
-		// find filter dorpdown
-		Select dropDownFilter = new Select(browser.findElement(By.xpath(
-				"//body/table[@class='mainbody']/tbody/tr" + "/td/table/tbody/tr/td/table/tbody/tr/td/select[1]")));
+		obj.GoButtonClick();
 
 		// order the products according to price: high to low
-		dropDownFilter.selectByVisibleText("Price: High to Low");
+		obj.HighToLowOption();
+
+		
 
 		// defining two arrays
 		ArrayList<Integer> priceList = new ArrayList<Integer>();
@@ -52,6 +50,7 @@ class HamrobazarTest {
 
 		// listing all prices and replacing "RS" and "," then trimming in both array
 		List<WebElement> priceObject = browser.findElements(By.xpath("//table[*]//tbody[1]//tr[1]//td[5]//b[1]"));
+
 		try {
 			for (WebElement a : priceObject) {
 				priceList.add(Integer.parseInt(a.getText().replace("Rs.", "").replace(",", "").trim()));
